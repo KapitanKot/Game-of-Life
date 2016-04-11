@@ -1,5 +1,6 @@
-import sys, pygame
+import sys, pygame, random
 from pygame.locals import *
+from random import *
 
 class GameOfLife(object):
     """Main"""
@@ -14,10 +15,11 @@ class GameOfLife(object):
     def events(self):
         """Event handler"""
         for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                return True
 
+            if event.type == KEYDOWN and event.key == K_ESCAPE:
+                pygame.quit()
+                sys.exit()
+                
             if event.type == MOUSEBUTTONDOWN:
                 self.population.mouse()
 
@@ -31,9 +33,9 @@ class GameOfLife(object):
                 self.started = False
                 self.population.reset()
 
-            if event.type == KEYDOWN and event.key == K_l:
+            if event.type == KEYDOWN and event.key == K_f:
                 self.started = False
-                self.population.load()
+                self.population.random()
 
     def run(self):
         """Main loop"""
@@ -51,7 +53,7 @@ class Board(object):
         self.height = height
         self.window = pygame.display.set_mode((self.width, self.height + 18), 0, 32)
         font = pygame.font.Font('C:\Windows\Fonts\Arial.ttf', 12)
-        self.text = font.render('Start (Enter)      Stop (S)      Reset (R)', True, (255, 255, 255))
+        self.text = font.render('Start (Enter)      Stop (S)      Reset (R)      Random (F)', True, (255, 255, 255))
         pygame.display.set_caption('Game of Life')
 
     def draw(self, *args):
@@ -77,8 +79,10 @@ class Population(object):
     def reset(self):
         self.generation = self.wipeGeneration()
 
-    def load(self):
-        self.generation = 
+    def random(self):
+        for x in range(len(self.generation)):
+            for y in range(len(self.generation[0])):
+                self.generation[x][y] = randrange(0,2) 
 
     def wipeGeneration(self):
         """Make and return empty population matrix"""
@@ -91,12 +95,13 @@ class Population(object):
         """Kill or alive cell"""
         key = pygame.mouse.get_pressed()
         mx, my = pygame.mouse.get_pos()
+        if mx <= (self.width * self.size) and my <= (self.height * self.size):
 
-        mx //= self.size
-        my //= self.size
- 
-        if key[0] == 1: self.generation[mx][my] = 1
-        elif key[2] == 1: self.generation[mx][my] = 0
+            mx //= self.size
+            my //= self.size
+     
+            if key[0] == 1: self.generation[mx][my] = 1
+            elif key[2] == 1: self.generation[mx][my] = 0
 
     def aliveCells(self):
         """Return alive cells"""
@@ -148,5 +153,5 @@ class Population(object):
         self.generation = nextGen
 
 if __name__ == "__main__":
-    game = GameOfLife(40, 40)
+    game = GameOfLife(80, 80)
     game.run()
