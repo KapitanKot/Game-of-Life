@@ -27,6 +27,14 @@ class GameOfLife(object):
             if event.type == KEYDOWN and event.key == K_s:
                 self.started = False
 
+            if event.type == KEYDOWN and event.key == K_r:
+                self.started = False
+                self.population.reset()
+
+            if event.type == KEYDOWN and event.key == K_l:
+                self.started = False
+                self.population.load()
+
     def run(self):
         """Main loop"""
         while not self.events():
@@ -65,6 +73,12 @@ class Population(object):
         self.width = width
         self.height = height
         self.generation = self.wipeGeneration()
+
+    def reset(self):
+        self.generation = self.wipeGeneration()
+
+    def load(self):
+        self.generation = 
 
     def wipeGeneration(self):
         """Make and return empty population matrix"""
