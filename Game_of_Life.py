@@ -16,6 +16,10 @@ class GameOfLife(object):
         """Event handler"""
         for event in pygame.event.get():
 
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+            
             if event.type == KEYDOWN and event.key == K_ESCAPE:
                 pygame.quit()
                 sys.exit()
@@ -153,5 +157,5 @@ class Population(object):
         self.generation = nextGen
 
 if __name__ == "__main__":
-    game = GameOfLife(80, 80)
+    game = GameOfLife(40, 40)
     game.run()
